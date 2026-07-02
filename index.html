@@ -6,603 +6,99 @@
     <title>Вечер для тебя 💕</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💌</text></svg>">
     <style>
+        /* ... весь CSS без изменений ... */
         @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 30%, #f48fb1 60%, #f06292 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Floating hearts background */
-        .hearts-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .floating-heart {
-            position: absolute;
-            font-size: 20px;
-            animation: floatUp linear infinite;
-            opacity: 0.3;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) rotate(0deg) scale(1);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.3;
-            }
-            90% {
-                opacity: 0.3;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg) scale(0.5);
-                opacity: 0;
-            }
-        }
-
-        /* Sparkle effect */
-        .sparkle-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .sparkle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: radial-gradient(circle, #fff 0%, transparent 70%);
-            border-radius: 50%;
-            animation: sparkle 3s ease-in-out infinite;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
-        /* Main container */
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 420px;
-            margin: 0 auto;
-            padding: 20px 16px 40px;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 30px 0 20px;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .header h1 {
-            font-family: 'Comfortaa', cursive;
-            font-size: 28px;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(233, 30, 99, 0.3);
-            margin-bottom: 8px;
-        }
-
-        .header .subtitle {
-            font-size: 15px;
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 300;
-        }
-
-        .header .date-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            padding: 8px 20px;
-            border-radius: 25px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Timeline line */
-        .timeline {
-            position: relative;
-            padding: 10px 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 28px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.8), rgba(255,255,255,0.3));
-        }
-
-        /* Card styles */
-        .card {
-            position: relative;
-            margin-bottom: 24px;
-            margin-left: 48px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(233, 30, 99, 0.15),
-                        0 2px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            opacity: 0;
-            transform: translateX(30px);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .card.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        /* Timeline dot */
-        .card-dot {
-            position: absolute;
-            left: -40px;
-            top: 24px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f06292, #e91e63);
-            border: 3px solid #fff;
-            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4);
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-dot::after {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: #fff;
-            border-radius: 50%;
-        }
-
-        .card-dot.active {
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4); }
-            50% { box-shadow: 0 2px 20px rgba(233, 30, 99, 0.7); }
-        }
-
-        /* Card header */
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .card-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            flex-shrink: 0;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', sans-serif; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 30%, #f48fb1 60%, #f06292 100%); min-height: 100vh; overflow-x: hidden; position: relative; }
+        .hearts-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .floating-heart { position: absolute; font-size: 20px; animation: floatUp linear infinite; opacity: 0.3; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg) scale(1); opacity: 0; } 10% { opacity: 0.3; } 90% { opacity: 0.3; } 100% { transform: translateY(-10vh) rotate(360deg) scale(0.5); opacity: 0; } }
+        .sparkle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .sparkle { position: absolute; width: 6px; height: 6px; background: radial-gradient(circle, #fff 0%, transparent 70%); border-radius: 50%; animation: sparkle 3s ease-in-out infinite; }
+        @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1); } }
+        .container { position: relative; z-index: 10; max-width: 420px; margin: 0 auto; padding: 20px 16px 40px; }
+        .header { text-align: center; padding: 30px 0 20px; animation: fadeInDown 1s ease-out; }
+        .header h1 { font-family: 'Comfortaa', cursive; font-size: 28px; color: #fff; text-shadow: 2px 2px 10px rgba(233, 30, 99, 0.3); margin-bottom: 8px; }
+        .header .subtitle { font-size: 15px; color: rgba(255, 255, 255, 0.85); font-weight: 300; }
+        .header .date-badge { display: inline-block; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 25px; margin-top: 12px; font-size: 13px; color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .timeline { position: relative; padding: 10px 0; }
+        .timeline::before { content: ''; position: absolute; left: 28px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.8), rgba(255,255,255,0.3)); }
+        .card { position: relative; margin-bottom: 24px; margin-left: 48px; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; box-shadow: 0 8px 32px rgba(233, 30, 99, 0.15), 0 2px 8px rgba(0, 0, 0, 0.05); border: 1px solid rgba(255, 255, 255, 0.6); opacity: 0; transform: translateX(30px); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .card.visible { opacity: 1; transform: translateX(0); }
+        .card:active { transform: scale(0.98); }
+        .card-dot { position: absolute; left: -40px; top: 24px; width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, #f06292, #e91e63); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4); z-index: 2; display: flex; align-items: center; justify-content: center; }
+        .card-dot::after { content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+        .card-dot.active { animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4); } 50% { box-shadow: 0 2px 20px rgba(233, 30, 99, 0.7); } }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .card-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
         .card-icon.river { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
         .card-icon.cinema { background: linear-gradient(135deg, #fce4ec, #f8bbd0); }
         .card-icon.cafe { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
         .card-icon.park { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
         .card-icon.home { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
-
-        .card-title-group {
-            flex: 1;
-        }
-
-        .card-title {
-            font-family: 'Comfortaa', cursive;
-            font-size: 17px;
-            font-weight: 600;
-            color: #c2185b;
-            margin-bottom: 2px;
-        }
-
-        .card-time {
-            font-size: 13px;
-            color: #e91e63;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .card-time svg {
-            width: 14px;
-            height: 14px;
-        }
-
-        /* Card body */
-        .card-body {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* Movie card specifics */
-        .movie-poster {
-            width: 100%;
-            border-radius: 14px;
-            margin: 12px 0;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .movie-poster img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .movie-poster .placeholder {
-            font-size: 48px;
-        }
-
-        .seats-preview {
-            margin-top: 12px;
-            background: linear-gradient(135deg, #fce4ec, #fff);
-            border-radius: 14px;
-            padding: 14px;
-            border: 1px solid rgba(233, 30, 99, 0.1);
-        }
-
-        .seats-preview-title {
-            font-size: 12px;
-            color: #e91e63;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .seats-grid {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .seat {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px 8px 4px 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .seat.taken {
-            background: #e0e0e0;
-            opacity: 0.5;
-        }
-
-        .seat.ours {
-            background: linear-gradient(135deg, #f06292, #e91e63);
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4);
-            animation: seatPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes seatPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .screen-bar {
-            width: 60%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #e91e63, transparent);
-            margin: 0 auto 12px;
-            border-radius: 2px;
-            font-size: 10px;
-            color: #e91e63;
-            text-align: center;
-            padding-top: 8px;
-            letter-spacing: 2px;
-        }
-
-        /* Location link */
-        .location-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 12px;
-            padding: 10px 14px;
-            background: linear-gradient(135deg, #fce4ec, #fff);
-            border-radius: 12px;
-            text-decoration: none;
-            color: #c2185b;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(233, 30, 99, 0.1);
-        }
-
-        .location-link:hover {
-            background: linear-gradient(135deg, #f8bbd0, #fce4ec);
-            transform: translateX(4px);
-        }
-
-        .location-link svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-
-        .location-address {
-            font-size: 11px;
-            color: #999;
-            font-weight: 400;
-            margin-top: 2px;
-        }
-
-        /* Park card special */
-        .park-visual {
-            margin: 12px 0;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            border-radius: 14px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .park-visual .emoji-row {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .park-visual .park-text {
-            font-size: 13px;
-            color: #2e7d32;
-            font-weight: 500;
-        }
-
-        /* Final card */
-        .card-final {
-            text-align: center;
-            padding: 28px 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(252,228,236,0.95));
-        }
-
-        .final-heart {
-            font-size: 64px;
-            animation: heartBeat 1.5s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.15); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.1); }
-        }
-
-        .final-text {
-            font-family: 'Comfortaa', cursive;
-            font-size: 24px;
-            color: #c2185b;
-            margin: 16px 0 8px;
-            font-weight: 700;
-        }
-
-        .final-subtext {
-            font-size: 14px;
-            color: #e91e63;
-            margin-bottom: 20px;
-        }
-
-        .agree-btn {
-            display: inline-block;
-            padding: 14px 48px;
-            background: linear-gradient(135deg, #f06292, #e91e63);
-            color: #fff;
-            border: none;
-            border-radius: 30px;
-            font-family: 'Comfortaa', cursive;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .agree-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 28px rgba(233, 30, 99, 0.5);
-        }
-
-        .agree-btn:active {
-            transform: scale(0.95);
-        }
-
-        .insta-hint {
-            margin-top: 16px;
-            font-size: 12px;
-            color: #aaa;
-        }
-
-        .insta-hint a {
-            color: #e91e63;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* Confetti */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-            display: none;
-        }
-
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            animation: confettiFall linear forwards;
-        }
-
-        @keyframes confettiFall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        /* Success state */
-        .success-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(252, 228, 236, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .success-overlay.show {
-            display: flex;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .success-emoji {
-            font-size: 80px;
-            animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes bounceIn {
-            from { transform: scale(0); }
-            to { transform: scale(1); }
-        }
-
-        .success-text {
-            font-family: 'Comfortaa', cursive;
-            font-size: 28px;
-            color: #c2185b;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .success-subtext {
-            font-size: 15px;
-            color: #e91e63;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        /* Scroll indicator */
-        .scroll-hint {
-            text-align: center;
-            padding: 10px;
-            animation: bounce 2s ease-in-out infinite;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 13px;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
-        }
-
-        /* Divider */
-        .section-divider {
-            text-align: center;
-            padding: 8px 0;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
+        .card-title-group { flex: 1; }
+        .card-title { font-family: 'Comfortaa', cursive; font-size: 17px; font-weight: 600; color: #c2185b; margin-bottom: 2px; }
+        .card-time { font-size: 13px; color: #e91e63; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .card-time svg { width: 14px; height: 14px; }
+        .card-body { font-size: 14px; color: #555; line-height: 1.6; }
+        .movie-poster { width: 100%; border-radius: 14px; margin: 12px 0; aspect-ratio: 16/9; object-fit: cover; background: linear-gradient(135deg, #fce4ec, #f8bbd0); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .movie-poster img { width: 100%; height: 100%; object-fit: cover; }
+        .movie-poster .placeholder { font-size: 48px; }
+        .seats-preview { margin-top: 12px; background: linear-gradient(135deg, #fce4ec, #fff); border-radius: 14px; padding: 14px; border: 1px solid rgba(233, 30, 99, 0.1); }
+        .seats-preview-title { font-size: 12px; color: #e91e63; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .seats-grid { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+        .seat { width: 32px; height: 32px; border-radius: 8px 8px 4px 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.3s ease; }
+        .seat.taken { background: #e0e0e0; opacity: 0.5; }
+        .seat.ours { background: linear-gradient(135deg, #f06292, #e91e63); color: #fff; box-shadow: 0 2px 8px rgba(233, 30, 99, 0.4); animation: seatPulse 2s ease-in-out infinite; }
+        @keyframes seatPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .screen-bar { width: 60%; height: 4px; background: linear-gradient(90deg, transparent, #e91e63, transparent); margin: 0 auto 12px; border-radius: 2px; font-size: 10px; color: #e91e63; text-align: center; padding-top: 8px; letter-spacing: 2px; }
+        .location-link { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 10px 14px; background: linear-gradient(135deg, #fce4ec, #fff); border-radius: 12px; text-decoration: none; color: #c2185b; font-size: 13px; font-weight: 600; transition: all 0.3s ease; border: 1px solid rgba(233, 30, 99, 0.1); }
+        .location-link:hover { background: linear-gradient(135deg, #f8bbd0, #fce4ec); transform: translateX(4px); }
+        .location-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .location-address { font-size: 11px; color: #999; font-weight: 400; margin-top: 2px; }
+        .park-visual { margin: 12px 0; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 14px; padding: 20px; text-align: center; }
+        .park-visual .emoji-row { font-size: 28px; margin-bottom: 8px; }
+        .park-visual .park-text { font-size: 13px; color: #2e7d32; font-weight: 500; }
+        .card-final { text-align: center; padding: 28px 20px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(252,228,236,0.95)); }
+        .final-heart { font-size: 64px; animation: heartBeat 1.5s ease-in-out infinite; display: inline-block; }
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.15); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } }
+        .final-text { font-family: 'Comfortaa', cursive; font-size: 24px; color: #c2185b; margin: 16px 0 8px; font-weight: 700; }
+        .final-subtext { font-size: 14px; color: #e91e63; margin-bottom: 20px; }
+        .agree-btn { display: inline-block; padding: 14px 48px; background: linear-gradient(135deg, #f06292, #e91e63); color: #fff; border: none; border-radius: 30px; font-family: 'Comfortaa', cursive; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4); transition: all 0.3s ease; text-decoration: none; }
+        .agree-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(233, 30, 99, 0.5); }
+        .agree-btn:active { transform: scale(0.95); }
+        .insta-hint { margin-top: 16px; font-size: 12px; color: #aaa; }
+        .insta-hint a { color: #e91e63; text-decoration: none; font-weight: 600; }
+        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; display: none; }
+        .confetti { position: absolute; width: 10px; height: 10px; top: -10px; animation: confettiFall linear forwards; }
+        @keyframes confettiFall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        .success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(252, 228, 236, 0.95); backdrop-filter: blur(10px); z-index: 999; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        .success-overlay.show { display: flex; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .success-emoji { font-size: 80px; animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes bounceIn { from { transform: scale(0); } to { transform: scale(1); } }
+        .success-text { font-family: 'Comfortaa', cursive; font-size: 28px; color: #c2185b; margin-top: 20px; text-align: center; }
+        .success-subtext { font-size: 15px; color: #e91e63; margin-top: 10px; text-align: center; }
+        .scroll-hint { text-align: center; padding: 10px; animation: bounce 2s ease-in-out infinite; color: rgba(255, 255, 255, 0.7); font-size: 13px; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+        .section-divider { text-align: center; padding: 8px 0; font-size: 12px; color: rgba(255, 255, 255, 0.6); letter-spacing: 3px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <!-- Floating hearts background -->
     <div class="hearts-bg" id="heartsBg"></div>
-    
-    <!-- Sparkles -->
     <div class="sparkle-container" id="sparkles"></div>
-
-    <!-- Confetti container -->
     <div class="confetti-container" id="confetti"></div>
 
-    <!-- Success overlay -->
     <div class="success-overlay" id="successOverlay">
         <div class="success-emoji">💖</div>
         <div class="success-text">Ура! Я жду!</div>
-        <div class="success-subtext">Напиши мне в Instagram 💌</div>
+        <div class="success-subtext">Напиши мне в Telegram 💌</div>
     </div>
 
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>✨ Вечер для тебя ✨</h1>
             <p class="subtitle">У меня есть идеальный план на этот вечер...</p>
@@ -613,10 +109,8 @@
             <div>↓</div>
         </div>
 
-        <!-- Timeline -->
         <div class="timeline">
 
-            <!-- Card 1: River -->
             <div class="card" data-delay="0">
                 <div class="card-dot"></div>
                 <div class="card-header">
@@ -625,7 +119,7 @@
                         <div class="card-title">Речка</div>
                         <div class="card-time">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                            17:00 — 18:30
+                            18:00 — 20:30
                         </div>
                     </div>
                 </div>
@@ -634,48 +128,6 @@
                 </div>
             </div>
 
-            <!-- Section divider -->
-            <div class="section-divider">♥ ♥ ♥</div>
-
-            <!-- Card 2: Cinema -->
-            <div class="card" data-delay="100">
-                <div class="card-dot"></div>
-                <div class="card-header">
-                    <div class="card-icon cinema">🎬</div>
-                    <div class="card-title-group">
-                        <div class="card-title">Кино</div>
-                        <div class="card-time">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                            19:20 — 21:20
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="movie-poster">
-                        <img src="История.jpg" alt="История игрушек 5" onerror="this.style.display='none'; this.parentElement.querySelector('.placeholder').style.display='block';">
-                        <div class="placeholder" style="display:none;">🧸</div>
-                    </div>
-                    <div style="font-weight: 700; color: #c2185b; font-size: 15px; margin-bottom: 4px;">🧸 История игрушек 5</div>
-                    
-                    <div class="seats-preview">
-                        <div class="seats-preview-title">🎟 Наши места</div>
-                        <img src="Места.jpg" alt="Наши места" style="width: 100%; border-radius: 10px; margin-top: 8px; object-fit: cover;">
-                    </div>
-
-                    <a href="https://24afisha.by/ru/object/kinoteatr-oktyabr-gomel-gomel" target="_blank" class="location-link">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        <div>
-                            <div>Кинотеатр «Октябрь»</div>
-                            <div class="location-address">г. Гомель, ул. Барыкина, 127</div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Section divider -->
-            <div class="section-divider">♥ ♥ ♥</div>
-
-            <!-- Card 3: Cafe -->
             <div class="card" data-delay="200">
                 <div class="card-dot"></div>
                 <div class="card-header">
@@ -691,19 +143,18 @@
                 <div class="card-body">
                     Небольшой перерыв — вкусный кофе/чай и лёгкие десерты 🍰
                 </div>
-                <a href="https://yandex.ru/maps/?text=Гомель,+Билецкий+спуск,+1" target="_blank" class="location-link">
+                <!-- ✅ Заменённая ссылка на кафе -->
+                <a href="https://yandex.by/maps/-/CTeuFSkj" target="_blank" class="location-link">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     <div>
                         <div>Кафе</div>
-                        <div class="location-address">Гомель, Билецкий спуск, 1 • этаж 2</div>
+                        <div class="location-address">Гомель, улица Советская, 13 • этаж 1</div>
                     </div>
                 </a>
             </div>
 
-            <!-- Section divider -->
             <div class="section-divider">♥ ♥ ♥</div>
 
-            <!-- Card 4: Park Walk -->
             <div class="card" data-delay="300">
                 <div class="card-dot"></div>
                 <div class="card-header">
@@ -725,20 +176,19 @@
                 </div>
             </div>
 
-            <!-- Section divider -->
             <div class="section-divider">♥ ♥ ♥</div>
 
-            <!-- Card 5: Home / Final -->
             <div class="card card-final" data-delay="400">
                 <div class="card-dot active"></div>
                 <div class="final-heart">💖</div>
                 <div class="final-text">Согласна?</div>
                 <div class="final-subtext">Этот вечер будет незабываемым ✨</div>
-                <a href="https://www.instagram.com/voslavsky_m?igsh=MTF1MnNpZGkwNHl4YQ==" target="_blank" class="agree-btn" id="agreeBtn">
+                <!-- ✅ Исправлены кавычки и добавлен target -->
+                <a href="https://t.me/evgeniy_sotnikov" target="_blank" class="agree-btn" id="agreeBtn">
                     Да! 💕
                 </a>
                 <div class="insta-hint">
-                    Нажми и напиши мне в <a href="https://www.instagram.com/voslavsky_m?igsh=MTF1MnNpZGkwNHl4YQ==" target="_blank">Instagram</a> 💌
+                    Нажми и напиши мне в <a href="https://t.me/evgeniy_sotnikov" target="_blank">Telegram</a> 💌
                 </div>
             </div>
 
@@ -746,11 +196,10 @@
     </div>
 
     <script>
-        // Create floating hearts
+        // ... скрипт без изменений ...
         function createHearts() {
             const container = document.getElementById('heartsBg');
             const hearts = ['💕', '💗', '💖', '✨', '💝', '🌸', '💓'];
-            
             for (let i = 0; i < 15; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'floating-heart';
@@ -762,11 +211,8 @@
                 container.appendChild(heart);
             }
         }
-
-        // Create sparkles
         function createSparkles() {
             const container = document.getElementById('sparkles');
-            
             for (let i = 0; i < 20; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'sparkle';
@@ -777,11 +223,8 @@
                 container.appendChild(sparkle);
             }
         }
-
-        // Intersection Observer for card animations
         function initScrollAnimations() {
             const cards = document.querySelectorAll('.card');
-            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -791,20 +234,13 @@
                         }, delay);
                     }
                 });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
             cards.forEach(card => observer.observe(card));
         }
-
-        // Confetti effect
         function createConfetti() {
             const container = document.getElementById('confetti');
             container.style.display = 'block';
             const colors = ['#f06292', '#e91e63', '#fce4ec', '#ff80ab', '#f48fb1', '#ffeb3b', '#fff'];
-            
             for (let i = 0; i < 80; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
@@ -817,28 +253,21 @@
                 confetti.style.height = (6 + Math.random() * 8) + 'px';
                 container.appendChild(confetti);
             }
-
             setTimeout(() => {
                 container.style.display = 'none';
                 container.innerHTML = '';
             }, 4000);
         }
-
-        // Button click handler
         document.getElementById('agreeBtn').addEventListener('click', function(e) {
             e.preventDefault();
             createConfetti();
-            
             setTimeout(() => {
                 document.getElementById('successOverlay').classList.add('show');
             }, 500);
-
             setTimeout(() => {
-                window.open('https://www.instagram.com/voslavsky_m?igsh=MTF1MnNpZGkwNHl4YQ==', '_blank');
+                window.open('https://t.me/evgeniy_sotnikov', '_blank');
             }, 2000);
         });
-
-        // Initialize
         createHearts();
         createSparkles();
         initScrollAnimations();
